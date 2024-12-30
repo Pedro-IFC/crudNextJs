@@ -3,9 +3,11 @@ import Table from "../components/Table";
 import Formulario from "../components/Formulario";
 import Botao from "../components/Botao";
 import useClientes from "../hooks/useClientes";
+import useVisible from "../hooks/useVisible";
 
 export default function Home() {
-  const {cliente, clientes, visivel, setVisivel, salvarCliente, cadastrarCliente, clienteDelete, clienteEdit, obterTodos} = useClientes();
+  const {} = useVisible();
+  const {setTabelaVisivel, tabelaVisivel, cliente, clientes, salvarCliente, cadastrarCliente, clienteDelete, clienteEdit, obterTodos} = useClientes();
   return <>
     <div className={`
       flex justify-center items-center h-screen
@@ -14,7 +16,7 @@ export default function Home() {
     `}>
       <Layout titulo="Cadastro Simples">
         <div className="conteudo">
-          {visivel==="tabela"?
+          {tabelaVisivel?
           <>
             <Botao onClick={()=>cadastrarCliente()} className="bg-green-500">Cadastrar cliente</Botao>
             <Table clientes={clientes} clienteDelete={clienteDelete} clienteEdit={clienteEdit}></Table>
@@ -23,7 +25,7 @@ export default function Home() {
         <>
           <Formulario 
             clienteMudou={salvarCliente} 
-            cancelado={()=>setVisivel('tabela')} 
+            cancelado={()=>setTabelaVisivel()} 
             cliente={cliente}
           ></Formulario>
         </>

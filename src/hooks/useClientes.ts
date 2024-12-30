@@ -2,11 +2,12 @@ import Cliente from "../core/Cliente";
 import { useEffect, useState } from "react";
 import ClienteRepositorio from "../core/ClienteRepositorio";
 import CollectionCliente from "../backend/db/CollectionCliente";
+import useVisible from "./useVisible";
+
 export default function useClientes(){
     
   const repo: ClienteRepositorio = new CollectionCliente();
-
-  const [visivel, setVisivel] = useState<"tabela"|"form">("tabela");
+  const {formularioVisivel, tabelaVisivel, setFormVisivel, setTabelaVisivel} = useVisible();
   const [cliente, setCliente] = useState<Cliente>();
   const [clientes, setClientes] = useState<Cliente[]>([]);
 
@@ -14,12 +15,12 @@ export default function useClientes(){
   function obterTodos() {
     repo.obterTodos().then(clientes => {
       setClientes(clientes);
-      setVisivel('tabela');
+      setTabelaVisivel();
     });
   }
   let clienteEdit = (cliente: Cliente) =>{
     setCliente(cliente);
-    setVisivel('form');
+    setFormVisivel();
   }
   let clienteDelete = (cliente: Cliente) =>{
     repo.excluir(cliente);
@@ -31,13 +32,15 @@ export default function useClientes(){
   }
   let cadastrarCliente = () =>{
     setCliente(Cliente.vazio());
-    setVisivel('form');
+    setFormVisivel();
   }
   return {
+    formularioVisivel, 
+    tabelaVisivel, 
+    setFormVisivel, 
+    setTabelaVisivel,
     cliente,
     clientes,
-    visivel,
-    setVisivel,
     salvarCliente,
     cadastrarCliente,
     clienteDelete,
